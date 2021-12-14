@@ -1,5 +1,14 @@
-import Layout from 'src/components/layouts/AppLayout';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Router from './routes/Router';
+import store from './services/store';
 
-const App = () => <Layout />;
+const App = () => (
+    <Provider store={store}>
+        <BrowserRouter>
+            <Router />
+        </BrowserRouter>
+    </Provider>
+);
 
 export default App;
