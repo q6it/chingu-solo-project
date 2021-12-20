@@ -17,9 +17,9 @@ const authenticationSlice = createSlice({
                     state.name = payload.name;
                     state.email = payload.email;
                 }
-                if (payload.accessToken) {
+                if (payload.token) {
                     // jsCookie.set('accessToken', payload.accessToken);
-                    state.accessToken = payload.accessToken;
+                    state.token = payload.token;
                 }
             })
             .addCase(deleteCredentials, () => initialState);

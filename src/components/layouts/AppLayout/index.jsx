@@ -5,17 +5,13 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import Input from 'src/components/atoms/Input';
 import ItemsList from 'src/components/organisms/ItemsList';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCredentials } from 'src/services/authentication';
+import { useAuth } from 'src/hooks/useAuth';
+import { useHistory } from 'react-router-dom';
+// import { setCredentials } from 'src/services/authentication';
 
-import { login } from 'src/services/api';
-import { selectUser } from 'src/services/authentication/selectors';
+// import { login } from 'src/services/api';
+import { selectUser } from '@services/authentication/selectors';
 
-// const user = {
-//     name: 'Tom Cook',
-//     email: 'tom@example.com',
-//     imageUrl:
-//         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-// };
 // const navigation = [
 //     { name: 'Dashboard', href: '#', current: true },
 //     { name: 'Team', href: '#', current: false },
@@ -34,21 +30,24 @@ function classNames(...classes) {
 
 export default function Layout() {
     const dispatch = useDispatch();
+    const auth = useAuth();
+
+    const history = useHistory();
     const user = useSelector(selectUser);
     console.log('🚀 ~ file: index.jsx ~ line 38 ~ Layout ~ user', user);
 
     useEffect(() => {
         (async () => {
-            const userData = await login();
-            console.log('🚀 ~ file: index.jsx ~ line 42 ~ userData', userData);
-            dispatch(setCredentials({ ...userData }));
+            // const userData = await login();
+            // console.log('🚀 ~ file: index.jsx ~ line 42 ~ userData', userData);
+            // dispatch(setCredentials({ ...userData }));
         })();
     }, [user]);
     return (
         <>
-            {user ? (
+            {user && (
                 <div className="min-h-full">
-                    <Disclosure as="nav" className="bg-white border-b border-gray-200">
+                    <Disclosure as="nav" className="bg-white border-b border-gray-200 p-1">
                         {({ open }) => (
                             <>
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,13 +55,15 @@ export default function Layout() {
                                         <div className="flex">
                                             <div className="flex-shrink-0 flex items-center">
                                                 <img
-                                                    className="block lg:hidden h-8 w-auto"
-                                                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                                    className="block lg:hidden h-12 w-auto"
+                                                    // src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                                    src="https://cdn.cdnlogo.com/logos/e/39/ethereum.svg"
                                                     alt="Workflow"
                                                 />
                                                 <img
-                                                    className="hidden lg:block h-8 w-auto"
-                                                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                                                    className="hidden lg:block h-16 w-auto"
+                                                    // src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                                                    src="https://cdn.cdnlogo.com/logos/e/39/ethereum.svg"
                                                     alt="Workflow"
                                                 />
                                             </div>
@@ -85,14 +86,6 @@ export default function Layout() {
                                         </div> */}
                                         </div>
                                         <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                                            <button
-                                                type="button"
-                                                className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                            >
-                                                <span className="sr-only">View notifications</span>
-                                                <BellIcon className="h-6 w-6" aria-hidden="true" />
-                                            </button>
-
                                             {/* Profile dropdown */}
                                             <Menu as="div" className="ml-3 relative">
                                                 <div>
@@ -135,6 +128,20 @@ export default function Layout() {
                                                                 )}
                                                             </Menu.Item>
                                                         ))}
+                                                        <Menu.Item>
+                                                            <button
+                                                                type="button"
+                                                                className={classNames(
+                                                                    'block px-4 py-2 text-sm text-gray-700',
+                                                                )}
+                                                                onClick={() => {
+                                                                    auth.signOut;
+                                                                    history.push('/login');
+                                                                }}
+                                                            >
+                                                                test
+                                                            </button>
+                                                        </Menu.Item>
                                                     </Menu.Items>
                                                 </Transition>
                                             </Menu>
@@ -245,7 +252,7 @@ export default function Layout() {
                         </main>
                     </div>
                 </div>
-            ) : null}
+            )}
         </>
     );
 }

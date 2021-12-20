@@ -1,13 +1,16 @@
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { ProvideAuth } from 'src/hooks/useAuth';
 import Router from './routes/Router';
 import store from './services/store';
 
 const App = () => (
     <Provider store={store}>
-        <BrowserRouter>
-            <Router />
-        </BrowserRouter>
+        <ProvideAuth>
+            <BrowserRouter>
+                <Router />
+            </BrowserRouter>
+        </ProvideAuth>
     </Provider>
 );
 

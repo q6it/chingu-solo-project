@@ -21,7 +21,8 @@
     "jest": true
   },
   "globals": {
-    "React": true
+    "React": true,
+    "PropTypes": true
   },
   "rules": {
     "global-require": "off",
@@ -42,7 +43,6 @@
 
     "import/prefer-default-export": "off",
     "arrow-body-style": ["error", "as-needed"],
-
     "react/jsx-indent": ["error", 4],
     "react/jsx-indent-props": ["error", 4],
     "react/prop-types": ["error"],
@@ -52,15 +52,23 @@
     "jsx-a11y/no-static-element-interactions": ["warn"],
     "jsx-a11y/click-events-have-key-events": ["warn"],
     "jsx-a11y/mouse-events-have-key-events": ["warn"],
-    "jsx-a11y/label-has-associated-control": ["off"]
+    "jsx-a11y/label-has-associated-control": ["off"],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   },
   "settings": {
     "react": {
       "version": "detect"
     },
+
     "import/resolver": {
       "alias": {
-        "map": [["src", "./src"]],
+        "map": [
+          ["src", "./src"],
+          ["@hooks", "./src/hooks"],
+          ["@routes", "./src/routes"],
+          ["@components", "./src/components"],
+          ["@services", "./src/services"]
+        ],
         "extensions": [".js", ".jsx"]
       }
     }
