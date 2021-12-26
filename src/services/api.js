@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const baseUrl = 'http://localhost:3001';
 
+// const instance = axios.create()
+
 export const getItems = async (token) => {
     const {
         data: { items },
@@ -23,11 +25,48 @@ export const login = async (email, password) => {
     return userData;
 };
 
-export const register = async (email, password, name) => {
+export const registerAccount = async ({ email, password, name }) => {
     const { data } = await axios.post(`${baseUrl}/v1/auth/register`, {
         email,
         password,
         name,
+    });
+    return data.message;
+};
+
+export const savePost = async ({ title, body, id, userId }, token) => {
+    console.log('🚀 ~ file: api.js ~ line 38 ~ savePost ~ token', token);
+    const { data } = await axios.post(
+        `${baseUrl}/v1/items/save`,
+        { title, body, id, userId },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+    return data.message;
+};
+
+export const updatePost = async ({ title, body, id, userId }, token) => {
+    const { data } = await axios.put(
+        `${baseUrl}/v1/items/update`,
+        { title, body, id, userId },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+    return data.message;
+};
+
+export const deletePost = async ({ id, userId }, token) => {
+    const { data } = await axios.delete(`${baseUrl}/v1/items/delete`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        data: { id, userId },
     });
     return data.message;
 };

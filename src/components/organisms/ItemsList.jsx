@@ -1,75 +1,93 @@
 import { useEffect, useState } from 'react';
-import { getItems } from 'src/services/api';
+import { deletePost, getItems } from 'src/services/api';
 import { useSelector } from 'react-redux';
+import { selectUser } from 'src/services/authentication/selectors';
+import EditForm from '../molecules/EditForm';
 
-import { selectUser } from '@services/authentication/selectors';
-// const announcements = [
-//     {
-//         id: 1,
-//         title: 'Office closed on July 2nd',
-//         preview:
-//             'Cum qui rem deleniti. Suscipit in dolor veritatis sequi aut. Vero ut earum quis deleniti. Ut a sunt eum cum ut repudiandae possimus. Nihil ex tempora neque cum consectetur dolores.',
-//     },
-//     {
-//         id: 2,
-//         title: 'New password policy',
-//         preview:
-//             'Alias inventore ut autem optio voluptas et repellendus. Facere totam quaerat quam quo laudantium cumque eaque excepturi vel. Accusamus maxime ipsam reprehenderit rerum id repellendus rerum. Culpa cum vel natus. Est sit autem mollitia.',
-//     },
-//     {
-//         id: 3,
-//         title: 'Office closed on July 2nd',
-//         preview:
-//             'Tenetur libero voluptatem rerum occaecati qui est molestiae exercitationem. Voluptate quisquam iure assumenda consequatur ex et recusandae. Alias consectetur voluptatibus. Accusamus a ab dicta et. Consequatur quis dignissimos voluptatem nisi.',
-//     },
-// ];
+export default function ItemsList({ posts, setPosts }) {
+    // const [posts, setPosts] = useState([]);
 
-export default function ItemsList() {
-    const [posts, setPosts] = useState([]);
-    const { token } = useSelector(selectUser);
-    console.log('🚀 ~ file: ItemsList.jsx ~ line 30 ~ ItemsList ~ token', token);
-    useEffect(() => {
-        (async () => {
-            const postsData = await getItems(token);
-            console.log('🚀 ~ file: ItemsList.jsx ~ line 30 ~ postsData', postsData);
-            setPosts(postsData);
-        })();
-    }, []);
+    console.log('🚀 ~ file: ItemsList.jsx ~ line 28 ~ ItemsList ~ posts', posts);
+    const [postEdit, setPostEdit] = useState({ id: null, edit: false });
+    console.log('🚀 ~ file: ItemsList.jsx ~ line 29 ~ ItemsList ~ postEdit', postEdit);
+    const { token, email } = useSelector(selectUser);
+
+    // useEffect(() => {
+    //     (async () => {
+    //         const postsData = await getItems(user.token);
+    //         setPosts(postsData);
+    //     })();
+    // }, [])
+    const handleDelete = async ({ id }) => {
+        await deletePost({ id, userId: email }, token);
+        setPosts([...posts.filter((p) => p.id !== id)]);
+    };
+
+    const handleEdit = async ({ id }) => {
+        await setPostEdit({ id, edit: !postEdit.edit });
+    };
+
+    // TODO: handle post data in redux, too many components relay on it
+
     return (
         <div>
-            <div className="flow-root mt-6">
-                <ul className="-my-5 divide-y divide-gray-200">
-                    {posts.map((announcement) => (
-                        <li key={announcement.id} className="py-5">
-                            <div className="relative focus-within:ring-2 focus-within:ring-indigo-500">
-                                <h3 className="text-sm font-semibold text-gray-800">
-                                    <button
-                                        type="button"
-                                        className="hover:underline focus:outline-none"
-                                    >
-                                        <span className="absolute inset-0" aria-hidden="true" />
-                                        {announcement.title}
-                                    </button>
-                                    {/* <a href="#" className="hover:underline focus:outline-none">
+            <div className="mt-3 divide-y-2 divide-gray-800">
+                <ul>
+                    {posts.map((post) => (
+                        <li key={post.id} className="py-5">
+                            {postEdit.id === post.id && postEdit.edit ? (
+                                <EditForm
+                                    post={post}
+                                    posts={posts}
+                                    setPosts={setPosts}
+                                    setPostEdit={setPostEdit}
+                                />
+                            ) : (
+                                <div className="relative focus-within:ring-2 focus-within:ring-indigo-500">
+                                    <h3 className="text-sm font-semibold text-gray-800">
+                                        <button
+                                            type="button"
+                                            className="hover:underline focus:outline-none"
+                                        >
+                                            <span className="absolute inset-0" aria-hidden="true" />
+                                            {post.title}
+                                        </button>
+                                        {/* <a href="#" className="hover:underline focus:outline-none">
                                         <span className="absolute inset-0" aria-hidden="true" />
                                         {announcement.title}
                                     </a> */}
-                                </h3>
-                                <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                                    {announcement.body}
-                                </p>
-                            </div>
+                                    </h3>
+                                    <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                                        {post.body}
+                                    </p>
+                                </div>
+                            )}
+                            {postEdit.edit || (
+                                <div className="flex mt-2">
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="px-3 border border-transparent font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-5000"
+                                            onClick={() => handleEdit(post)}
+                                        >
+                                            {/* {postEdit.id === post.id && !postEdit.edit ? 'Edit' : null} */}
+                                            Edit
+                                        </button>
+                                    </div>
+                                    <div className="ml-8">
+                                        <button
+                                            type="button"
+                                            className="px-3 border border-transparent font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-5000"
+                                            onClick={() => handleDelete(post)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>
-            </div>
-            <div className="mt-6">
-                <button
-                    type="button"
-                    className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                >
-                    View all
-                </button>
             </div>
         </div>
     );
