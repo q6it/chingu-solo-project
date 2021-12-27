@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001';
+const baseUrl =
+    process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3001'
+        : 'https://chingu-be.herokuapp.com';
 
+// TODO: create axios instance to prevent calling for base url
 // const instance = axios.create()
 
 export const getItems = async (token) => {
@@ -35,7 +39,6 @@ export const registerAccount = async ({ email, password, name }) => {
 };
 
 export const savePost = async ({ title, body, id, userId }, token) => {
-    console.log('🚀 ~ file: api.js ~ line 38 ~ savePost ~ token', token);
     const { data } = await axios.post(
         `${baseUrl}/v1/items/save`,
         { title, body, id, userId },

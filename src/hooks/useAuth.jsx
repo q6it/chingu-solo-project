@@ -31,4 +31,8 @@ export function ProvideAuth({ children }) {
     return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
+ProvideAuth.propTypes = {
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+};
+
 export const useAuth = () => useContext(authContext);

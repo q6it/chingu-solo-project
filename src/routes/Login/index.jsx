@@ -1,12 +1,14 @@
 import React from 'react';
 
-import Input from '@components/atoms/Input';
 import { useForm } from 'react-hook-form';
 // import { login } from 'src/services/api';
 import { useHistory, Link } from 'react-router-dom';
 // import { useDispatch /* , useSelector */ } from 'react-redux';
 import { useAuth } from '@hooks/useAuth';
+import jsCookie from 'js-cookie';
 // import { selectUser } from '@services/authentication/selectors';
+
+import Input from '@components/atoms/Input';
 
 // import { setCredentials } from '@services/authentication';
 
@@ -25,6 +27,7 @@ const Login = () => {
             // const { email: userEmail, name, refreshToken } = auth.user;
             // dispatch(setCredentials({ email: userEmail, name, token: refreshToken }));
             if (userData.refreshToken) {
+                jsCookie.set('token', userData.refreshToken);
                 history.push('/');
             }
         } catch (error) {

@@ -1,63 +1,60 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import Input from 'src/components/atoms/Input';
-import ItemsList from 'src/components/organisms/ItemsList';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useAuth } from 'src/hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-// import { setCredentials } from 'src/services/authentication';
-// import { login } from 'src/services/api';
+import jsCookie from 'js-cookie';
+
 import { selectUser } from '@services/authentication/selectors';
 import { savePost, getItems } from '@services/api';
-// const navigation = [
-//     { name: 'Dashboard', href: '#', current: true },
-//     { name: 'Team', href: '#', current: false },
-//     { name: 'Projects', href: '#', current: false },
-//     { name: 'Calendar', href: '#', current: false },
-// ];
-// const userNavigation = [
-//     { name: 'Your Profile', href: '#' },
-//     { name: 'Settings', href: '#' },
-//     { name: 'Sign out', href: '#' },
-// ];
+
+import Input from 'src/components/atoms/Input';
+import ItemsList from 'src/components/organisms/ItemsList';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
 export default function Layout() {
-    // const dispatch = useDispatch();
-    const [postId, setPostId] = useState(2);
-    console.log('🚀 ~ file: index.jsx ~ line 34 ~ Layout ~ postId', postId);
+    // 10 is used cause of mocked db on backend
+    const [postId, setPostId] = useState(10);
     const [posts, setPosts] = useState([]);
     const auth = useAuth();
     const { register, handleSubmit } = useForm();
 
     const history = useHistory();
     const user = useSelector(selectUser);
-
-    // const testStateTrigger = (stateData) => {
-    //     console.log('🚀 ~ file: index.jsx ~ line 43 ~ testStateTrigger ~ stateData', stateData);
-    // };
+    const token = jsCookie.get('token');
 
     useEffect(() => {
         (async () => {
-            const postsData = await getItems(user.token);
+            const postsData = await getItems(token);
             setPosts(postsData);
         })();
+    }, []);
+
+    useEffect(() => {
+        if (!user.name) {
+            history.push('/login');
+        }
     }, []);
 
     const onSubmit = async (formData) => {
         setPostId(postId + 1);
         try {
-            await savePost({ ...formData, id: postId, userId: user.email }, user.token);
+            await savePost({ ...formData, id: postId, userId: user.email }, token);
             setPosts([...posts, { ...formData, id: postId, userId: user.email }]);
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const onLogout = () => {
+        auth.signOut();
+        jsCookie.remove('token');
+        history.push('/login');
     };
 
     return (
@@ -73,48 +70,23 @@ export default function Layout() {
                                             <div className="flex-shrink-0 flex items-center">
                                                 <img
                                                     className="block lg:hidden h-12 w-auto"
-                                                    // src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                                                     src="https://cdn.cdnlogo.com/logos/e/39/ethereum.svg"
                                                     alt="Workflow"
                                                 />
                                                 <img
                                                     className="hidden lg:block h-16 w-auto"
-                                                    // src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
                                                     src="https://cdn.cdnlogo.com/logos/e/39/ethereum.svg"
                                                     alt="Workflow"
                                                 />
                                             </div>
-                                            {/* <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                                            {navigation.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className={classNames(
-                                                        item.current
-                                                            ? 'border-indigo-500 text-gray-900'
-                                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                                                        'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
-                                                    )}
-                                                    aria-current={item.current ? 'page' : undefined}
-                                                >
-                                                    {item.name}
-                                                </a>
-                                            ))}
-                                        </div> */}
                                         </div>
                                         <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                                            {/* Profile dropdown */}
                                             <Menu as="div" className="ml-3 relative">
                                                 <div>
                                                     <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                         <span className="sr-only">
                                                             Open user menu
                                                         </span>
-                                                        {/* <img
-                                                        className="h-8 w-8 rounded-full"
-                                                        src={user.imageUrl}
-                                                        alt=""
-                                                    /> */}
                                                         {user.name}
                                                     </Menu.Button>
                                                 </div>
@@ -137,8 +109,7 @@ export default function Layout() {
                                                                         'block px-4 py-2 text-sm text-gray-700 w-full',
                                                                     )}
                                                                     onClick={() => {
-                                                                        auth.signOut();
-                                                                        history.push('/login');
+                                                                        onLogout();
                                                                     }}
                                                                 >
                                                                     Log out
@@ -150,7 +121,6 @@ export default function Layout() {
                                             </Menu>
                                         </div>
                                         <div className="-mr-2 flex items-center sm:hidden">
-                                            {/* Mobile menu button */}
                                             <Disclosure.Button className="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 <span className="sr-only">Open main menu</span>
                                                 {open ? (
@@ -170,24 +140,6 @@ export default function Layout() {
                                 </div>
 
                                 <Disclosure.Panel className="sm:hidden">
-                                    <div className="pt-2 pb-3 space-y-1">
-                                        {/* {navigation.map((item) => (
-                                        <Disclosure.Button
-                                            key={item.name}
-                                            as="a"
-                                            href={item.href}
-                                            className={classNames(
-                                                item.current
-                                                    ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                                                    : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
-                                                'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
-                                            )}
-                                            aria-current={item.current ? 'page' : undefined}
-                                        >
-                                            {item.name}
-                                        </Disclosure.Button>
-                                    ))} */}
-                                    </div>
                                     <div className="pt-4 pb-3 border-t border-gray-200">
                                         <div className="flex items-center px-4">
                                             <div className="flex-shrink-0">
@@ -215,25 +167,12 @@ export default function Layout() {
                                                             active ? 'bg-gray-100' : '',
                                                             'block px-4 py-2 text-sm text-gray-700 w-full',
                                                         )}
-                                                        onClick={() => {
-                                                            auth.signOut();
-                                                            history.push('/login');
-                                                        }}
+                                                        onClick={() => {}}
                                                     >
                                                         Log out
                                                     </button>
                                                 )}
                                             </Disclosure.Button>
-                                            {/* {userNavigation.map((item) => (
-                                                <Disclosure.Button
-                                                    key={item.name}
-                                                    as="a"
-                                                    href={item.href}
-                                                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-                                                >
-                                                    {item.name}
-                                                </Disclosure.Button>
-                                            ))} */}
                                         </div>
                                     </div>
                                 </Disclosure.Panel>
@@ -252,7 +191,6 @@ export default function Layout() {
                         <main>
                             <div className="container m-auto ">
                                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                                    {/* Replace with your content */}
                                     <div className="px-4 py-8 sm:px-0">
                                         <div className="border-4 border-collapse border-gray-200 rounded-lg h-auto p-5">
                                             <form onSubmit={handleSubmit(onSubmit)}>

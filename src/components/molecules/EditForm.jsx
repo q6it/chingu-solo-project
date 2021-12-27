@@ -9,7 +9,6 @@ const EditForm = ({ post, posts, setPosts, setPostEdit }) => {
     const { register, handleSubmit } = useForm();
     const { token, email } = useSelector(selectUser);
     const [currentPost, setCurrentPost] = useState(post);
-    console.log('🚀 ~ file: EditForm.jsx ~ line 12 ~ EditForm ~ currentPost', currentPost);
 
     const handleTitleChange = (e) => {
         setCurrentPost({ ...currentPost, title: e.target.value });
@@ -24,7 +23,7 @@ const EditForm = ({ post, posts, setPosts, setPostEdit }) => {
             setPosts([...posts, currentPost]);
             setPostEdit(false);
         } catch (error) {
-            console.log('🚀 ~ file: EditForm.jsx ~ line 25 ~ onSubmit ~ error', error);
+            console.error('🚀 ~ file: EditForm.jsx ~ line 25 ~ onSubmit ~ error', error);
         }
     };
     return (
@@ -62,6 +61,13 @@ const EditForm = ({ post, posts, setPosts, setPostEdit }) => {
             </div>
         </form>
     );
+};
+
+EditForm.propTypes = {
+    posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setPosts: PropTypes.func.isRequired,
+    post: PropTypes.object.isRequired,
+    setPostEdit: PropTypes.func.isRequired,
 };
 
 export default EditForm;

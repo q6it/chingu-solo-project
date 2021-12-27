@@ -1,18 +1,19 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from 'src/hooks/useAuth';
+import jsCookie from 'js-cookie';
 
 const PrivateRoute = ({ children, ...rest }) => {
-    const auth = useAuth();
-    console.log('🚀 ~ file: PrivateRoute.jsx ~ line 7 ~ PrivateRoute ~ auth', auth);
+    const token = jsCookie.get('token') || null;
     return (
         <Route
             {...rest}
-            render={(routerProps) =>
-                auth.user ? children : <Redirect to={{ pathname: '/login' }} />
-            }
+            render={() => (token ? children : <Redirect to={{ pathname: '/login' }} />)}
         ></Route>
     );
+};
+
+PrivateRoute.propTypes = {
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
 };
 
 export default PrivateRoute;

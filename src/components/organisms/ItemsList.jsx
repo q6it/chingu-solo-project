@@ -1,23 +1,15 @@
-import { useEffect, useState } from 'react';
-import { deletePost, getItems } from 'src/services/api';
+import { useState } from 'react';
+import { deletePost } from 'src/services/api';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'src/services/authentication/selectors';
+import jsCookie from 'js-cookie';
+
 import EditForm from '../molecules/EditForm';
 
-export default function ItemsList({ posts, setPosts }) {
-    // const [posts, setPosts] = useState([]);
-
-    console.log('🚀 ~ file: ItemsList.jsx ~ line 28 ~ ItemsList ~ posts', posts);
+const ItemsList = ({ posts, setPosts }) => {
     const [postEdit, setPostEdit] = useState({ id: null, edit: false });
-    console.log('🚀 ~ file: ItemsList.jsx ~ line 29 ~ ItemsList ~ postEdit', postEdit);
-    const { token, email } = useSelector(selectUser);
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const postsData = await getItems(user.token);
-    //         setPosts(postsData);
-    //     })();
-    // }, [])
+    const { email } = useSelector(selectUser);
+    const token = jsCookie.get('token');
     const handleDelete = async ({ id }) => {
         await deletePost({ id, userId: email }, token);
         setPosts([...posts.filter((p) => p.id !== id)]);
@@ -52,10 +44,6 @@ export default function ItemsList({ posts, setPosts }) {
                                             <span className="absolute inset-0" aria-hidden="true" />
                                             {post.title}
                                         </button>
-                                        {/* <a href="#" className="hover:underline focus:outline-none">
-                                        <span className="absolute inset-0" aria-hidden="true" />
-                                        {announcement.title}
-                                    </a> */}
                                     </h3>
                                     <p className="mt-1 text-sm text-gray-600 line-clamp-2">
                                         {post.body}
@@ -70,7 +58,6 @@ export default function ItemsList({ posts, setPosts }) {
                                             className="px-3 border border-transparent font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-5000"
                                             onClick={() => handleEdit(post)}
                                         >
-                                            {/* {postEdit.id === post.id && !postEdit.edit ? 'Edit' : null} */}
                                             Edit
                                         </button>
                                     </div>
@@ -91,4 +78,11 @@ export default function ItemsList({ posts, setPosts }) {
             </div>
         </div>
     );
-}
+};
+
+ItemsList.propTypes = {
+    posts: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setPosts: PropTypes.func.isRequired,
+};
+
+export default ItemsList;

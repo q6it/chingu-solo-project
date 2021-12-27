@@ -16,8 +16,6 @@ const Input = React.forwardRef(
                     value={value}
                     onChange={onChange}
                     autoComplete={autoComplete}
-                    // {...register(name)}
-                    // ref={register(name, { required })}
                     ref={ref}
                 />
             </div>
@@ -31,7 +29,10 @@ Input.propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
     placeholder: PropTypes.string,
+    autoComplete: PropTypes.string,
+    className: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onChange: PropTypes.func.isRequired,
 };
 
 Input.defaultProps = {
@@ -41,6 +42,8 @@ Input.defaultProps = {
     id: '',
     placeholder: '',
     value: undefined,
+    autoComplete: 'off',
+    className: '',
 };
 
 export default Input;
