@@ -27,4 +27,5 @@ Deployed at github pages https://q6it.github.io/chingu-solo-project
 
 -   handle post data in redux, too many components relay on it currently.
 -   create axios instance to prevent calling for base url
+-   data validation
 -   refactor components with atom design pattern
