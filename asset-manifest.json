@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/chingu-solo-project/static/css/main.8120714e.chunk.css",
+    "main.css": "/chingu-solo-project/static/css/main.fe5cb170.chunk.css",
     "main.js": "/chingu-solo-project/static/js/main.81c55547.chunk.js",
     "main.js.map": "/chingu-solo-project/static/js/main.81c55547.chunk.js.map",
     "runtime-main.js": "/chingu-solo-project/static/js/runtime-main.93023b3d.js",
@@ -8,13 +8,13 @@
     "static/js/2.6037bd50.chunk.js": "/chingu-solo-project/static/js/2.6037bd50.chunk.js",
     "static/js/2.6037bd50.chunk.js.map": "/chingu-solo-project/static/js/2.6037bd50.chunk.js.map",
     "index.html": "/chingu-solo-project/index.html",
-    "static/css/main.8120714e.chunk.css.map": "/chingu-solo-project/static/css/main.8120714e.chunk.css.map",
+    "static/css/main.fe5cb170.chunk.css.map": "/chingu-solo-project/static/css/main.fe5cb170.chunk.css.map",
     "static/js/2.6037bd50.chunk.js.LICENSE.txt": "/chingu-solo-project/static/js/2.6037bd50.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.93023b3d.js",
     "static/js/2.6037bd50.chunk.js",
-    "static/css/main.8120714e.chunk.css",
+    "static/css/main.fe5cb170.chunk.css",
     "static/js/main.81c55547.chunk.js"
   ]
 }
