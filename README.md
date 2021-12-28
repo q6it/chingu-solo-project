@@ -21,7 +21,7 @@ Made to participate in Voyage team work and also to learn new libraries / design
 
 ## Deploy
 
-Deployed at github pages
+Deployed at github pages https://q6it.github.io/chingu-solo-project
 
 ## TODO list
 
