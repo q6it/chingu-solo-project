@@ -7,7 +7,7 @@ import store from './services/store';
 const App = () => (
     <Provider store={store}>
         <ProvideAuth>
-            <BrowserRouter>
+            <BrowserRouter basename="/chingu-solo-project">
                 <Router />
             </BrowserRouter>
         </ProvideAuth>
