@@ -18,7 +18,7 @@ function classNames(...classes) {
 }
 
 export default function Layout() {
-    // 10 is used cause of mocked db on backend
+    /** Number 10 is used cause of mocked db on backend */
     const [postId, setPostId] = useState(10);
     const [posts, setPosts] = useState([]);
     const auth = useAuth();

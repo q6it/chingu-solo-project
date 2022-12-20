@@ -6,7 +6,6 @@ const baseUrl =
         : 'https://chingu-be.herokuapp.com';
 
 // TODO: create axios instance to prevent calling for base url
-// const instance = axios.create()
 
 export const getItems = async (token) => {
     const {

@@ -18,7 +18,6 @@ const authenticationSlice = createSlice({
                     state.email = payload.email;
                 }
                 if (payload.token) {
-                    // jsCookie.set('accessToken', payload.accessToken);
                     state.token = payload.token;
                 }
             })

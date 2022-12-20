@@ -15,7 +15,7 @@ const Register = () => {
             console.error(error);
         }
     };
-    // TODO: refactor form, button as atom
+    // TODO: refactor form
     return (
         <div className="h-screen w-screen">
             <div className="flex justify-center items-center flex-col pt-20 m-auto">
@@ -31,7 +31,6 @@ const Register = () => {
                         type="text"
                         className="mt-2"
                         placeholder="Your name"
-                        // register={register}
                         required
                         {...register('name')}
                     />

@@ -1,4 +1,4 @@
-# chingu-solo-project-backend
+# chingu-solo-project-frontend
 
 ## Overview
 
